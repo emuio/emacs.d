@@ -66,7 +66,7 @@ typical word processor."
         ;;(delete-selection-mode 1)
         (set (make-local-variable 'blink-cursor-interval) 0.6)
         (set (make-local-variable 'show-trailing-whitespace) nil)
-        (flyspell-mode 1)
+        (ignore-errors (flyspell-mode 1))
         (visual-line-mode 1))
     (kill-local-variable 'truncate-lines)
     (kill-local-variable 'word-wrap)
@@ -99,7 +99,7 @@ typical word processor."
 
 (setq org-refile-use-cache nil)
 
-                                        ; Targets include this file and any file contributing to the agenda - up to 5 levels deep
+;; Targets include this file and any file contributing to the agenda - up to 5 levels deep
 (setq org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5)))
 
 (after-load 'org-agenda
@@ -185,11 +185,14 @@ typical word processor."
                     (org-agenda-tags-todo-honor-ignore-options t)
                     (org-tags-match-list-sublevels t)
                     (org-agenda-todo-ignore-scheduled 'future)))
-            (tags-todo "-INBOX/NEXT"
+            (tags-todo "-INBOX"
                        ((org-agenda-overriding-header "Next Actions")
                         (org-agenda-tags-todo-honor-ignore-options t)
                         (org-agenda-todo-ignore-scheduled 'future)
-                        ;; TODO: skip if a parent is WAITING or HOLD
+                        (org-agenda-skip-function
+                         '(lambda ()
+                            (or (org-agenda-skip-subtree-if 'todo '("HOLD" "WAITING"))
+                                (org-agenda-skip-entry-if 'nottodo '("NEXT")))))
                         (org-tags-match-list-sublevels t)
                         (org-agenda-sorting-strategy
                          '(todo-state-down effort-up category-keep))))
@@ -202,7 +205,6 @@ typical word processor."
                        ((org-agenda-overriding-header "Orphaned Tasks")
                         (org-agenda-tags-todo-honor-ignore-options t)
                         (org-agenda-todo-ignore-scheduled 'future)
-                        ;; TODO: skip if a parent is a project
                         (org-agenda-skip-function
                          '(lambda ()
                             (or (org-agenda-skip-subtree-if 'todo '("PROJECT" "HOLD" "WAITING" "DELEGATED"))
@@ -222,9 +224,12 @@ typical word processor."
                         (org-agenda-todo-ignore-scheduled 'future)
                         (org-agenda-sorting-strategy
                          '(category-keep))))
-            (tags-todo "-INBOX/HOLD"
+            (tags-todo "-INBOX"
                        ((org-agenda-overriding-header "On Hold")
-                        ;; TODO: skip if a parent is WAITING or HOLD
+                        (org-agenda-skip-function
+                         '(lambda ()
+                            (or (org-agenda-skip-subtree-if 'todo '("WAITING"))
+                                (org-agenda-skip-entry-if 'nottodo '("HOLD")))))
                         (org-tags-match-list-sublevels nil)
                         (org-agenda-sorting-strategy
                          '(category-keep))))
@@ -278,10 +283,10 @@ typical word processor."
 (when (and *is-a-mac* (file-directory-p "/Applications/org-clock-statusbar.app"))
   (add-hook 'org-clock-in-hook
             (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
-                                (concat "tell application \"org-clock-statusbar\" to clock in \"" org-clock-current-task "\""))))
+                                     (concat "tell application \"org-clock-statusbar\" to clock in \"" org-clock-current-task "\""))))
   (add-hook 'org-clock-out-hook
             (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
-                                "tell application \"org-clock-statusbar\" to clock out"))))
+                                     "tell application \"org-clock-statusbar\" to clock out"))))
 
 
 
@@ -356,32 +361,32 @@ typical word processor."
         ("m" "Morning Journal" entry (file+datetree "~/org/journal.org.gpg")
          "* %U晨间日记:\n- 工作:%?\n- 金钱:\n- 健康:\n- 人际关系:\n- 兴趣:\n- 开心的事:\n- 不开心的事:\n- 梦境:")))
 
-; Targets include this file and any file contributing to the agenda - up to 9 levels deep
+                                        ; Targets include this file and any file contributing to the agenda - up to 9 levels deep
 (setq org-refile-targets (quote ((nil :maxlevel . 9)
                                  (org-agenda-files :maxlevel . 9))))
 
-; Use full outline paths for refile targets - we file directly with IDO
+                                        ; Use full outline paths for refile targets - we file directly with IDO
 (setq org-refile-use-outline-path t)
 
-; Targets complete directly with IDO
+                                        ; Targets complete directly with IDO
 (setq org-outline-path-complete-in-steps nil)
 
-; Allow refile to create parent tasks with confirmation
+                                        ; Allow refile to create parent tasks with confirmation
 (setq org-refile-allow-creating-parent-nodes (quote confirm))
 
-; Use IDO for both buffer and file completion and ido-everywhere to t
+                                        ; Use IDO for both buffer and file completion and ido-everywhere to t
 (setq org-completion-use-ido t)
 (setq ido-everywhere t)
 (setq ido-max-directory-size 100000)
 (ido-mode (quote both))
-; Use the current window when visiting files and buffers with ido
+                                        ; Use the current window when visiting files and buffers with ido
 (setq ido-default-file-method 'selected-window)
 (setq ido-default-buffer-method 'selected-window)
-; Use the current window for indirect buffer display
+                                        ; Use the current window for indirect buffer display
 (setq org-indirect-buffer-display 'current-window)
 
 ;;;; Refile settings
-; Exclude DONE state tasks from refile targets
+                                        ; Exclude DONE state tasks from refile targets
 (defun bh/verify-refile-target ()
   "Exclude todo keywords with a done state from refile targets"
   (not (member (nth 2 (org-heading-components)) org-done-keywords)))
@@ -393,9 +398,9 @@ typical word processor."
 (define-key global-map (kbd "C-c T") 'org-time-stamp-inactive)
 
 ;;;  image for org-mode in osx
-; 1. suspend current emacs window
-; 2. call screencapture to capture the screen and save as a file in $HOME/MEGA/img/
-; 3. put the png file reference in current buffer, like this:  [[/home/path/.emacs.img/1q2w3e.png]]
+                                        ; 1. suspend current emacs window
+                                        ; 2. call screencapture to capture the screen and save as a file in $HOME/MEGA/img/
+                                        ; 3. put the png file reference in current buffer, like this:  [[/home/path/.emacs.img/1q2w3e.png]]
 (add-hook 'org-mode-hook 'iimage-mode) ; enable iimage-mode for org-mode
 (setq org-image-actual-width nil)
 (defun my-screenshot ()
