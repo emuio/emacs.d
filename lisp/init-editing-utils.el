@@ -67,14 +67,8 @@
 
 
 
-(when (maybe-require-package 'indent-guide)
-  (add-hook 'prog-mode-hook 'indent-guide-mode)
-  (after-load 'indent-guide
-    (diminish 'indent-guide-mode)))
-
-
-
-(require-package 'nlinum)
+(unless (fboundp 'display-line-numbers-mode)
+  (require-package 'nlinum))
 
 
 (when (require-package 'rainbow-delimiters)
@@ -157,7 +151,7 @@
 (global-set-key (kbd "C-x C-.") 'pop-global-mark)
 
 (when (maybe-require-package 'avy)
-  (global-set-key (kbd "C-;") 'avy-goto-word-or-subword-1))
+  (global-set-key (kbd "C-;") 'avy-goto-char-timer))
 
 (require-package 'multiple-cursors)
 ;; multiple-cursors
@@ -306,7 +300,7 @@ With arg N, insert N newlines."
 
 
 (require-package 'guide-key)
-(setq guide-key/guide-key-sequence '("C-x" "C-c" "C-x 4" "C-x 5" "C-c ;" "C-c ; f" "C-c ' f" "C-x n" "C-x C-r" "C-x r" "M-s" "C-h"))
+(setq guide-key/guide-key-sequence '("C-x" "C-c" "C-x 4" "C-x 5" "C-c ;" "C-c ; f" "C-c ' f" "C-x n" "C-x C-r" "C-x r" "M-s" "C-h" "C-c C-a"))
 (add-hook 'after-init-hook
           (lambda ()
             (guide-key-mode 1)

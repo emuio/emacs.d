@@ -3,8 +3,6 @@
   (add-hook hook 'turn-on-elisp-slime-nav-mode))
 (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "ELisp")))
 
-(require-package 'lively)
-
 (setq-default initial-scratch-message
               (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n"))
 
@@ -100,18 +98,7 @@
 ;; ----------------------------------------------------------------------------
 (setq load-prefer-newer t)
 
-;; ----------------------------------------------------------------------------
-;; Highlight current sexp
-;; ----------------------------------------------------------------------------
-
-(require-package 'hl-sexp)
-
-;; Prevent flickery behaviour due to hl-sexp-mode unhighlighting before each command
-(after-load 'hl-sexp
-  (defadvice hl-sexp-mode (after unflicker (&optional turn-on) activate)
-    (when turn-on
-      (remove-hook 'pre-command-hook #'hl-sexp-unhighlight))))
-
+
 
 (require-package 'immortal-scratch)
 (add-hook 'after-init-hook 'immortal-scratch-mode)
@@ -259,7 +246,8 @@
 (add-hook 'emacs-lisp-mode-hook 'sanityinc/run-theme-mode-hooks-if-theme t)
 
 (when (maybe-require-package 'rainbow-mode)
-  (add-hook 'sanityinc/theme-mode-hook 'rainbow-mode))
+  (add-hook 'sanityinc/theme-mode-hook 'rainbow-mode)
+  (add-hook 'help-mode-hook 'rainbow-mode))
 
 (when (maybe-require-package 'aggressive-indent)
   ;; Can be prohibitively slow with very long forms

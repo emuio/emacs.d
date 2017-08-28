@@ -1,4 +1,4 @@
-(require-package 'org-fstree)
+(maybe-require-package 'org-fstree)
 (when *is-a-mac*
   (maybe-require-package 'grab-mac-link)
   (require-package 'org-mac-iCal))
@@ -49,6 +49,8 @@
 
 
 
+(maybe-require-package 'writeroom-mode)
+
 (define-minor-mode prose-mode
   "Set up a buffer for prose editing.
 This enables or modifies a number of settings so that the
@@ -57,6 +59,8 @@ typical word processor."
   nil " Prose" nil
   (if prose-mode
       (progn
+        (when (fboundp 'writeroom-mode)
+          (writeroom-mode 1))
         (setq truncate-lines nil)
         (setq word-wrap t)
         (setq cursor-type 'bar)
@@ -75,7 +79,9 @@ typical word processor."
     (buffer-face-mode -1)
     ;; (delete-selection-mode -1)
     (flyspell-mode -1)
-    (visual-line-mode -1)))
+    (visual-line-mode -1)
+    (when (fboundp 'writeroom-mode)
+      (writeroom-mode 0))))
 
 ;;(add-hook 'org-mode-hook 'buffer-face-mode)
 
@@ -86,12 +92,12 @@ typical word processor."
 
 ;;(global-set-key (kbd "C-c c") 'org-capture)
 
-;; (setq org-capture-templates
-;;       `(("t" "todo" entry (file "")  ; "" => org-default-notes-file
-;;          "* NEXT %?\n%U\n" :clock-resume t)
-;;         ("n" "note" entry (file "")
-;;          "* %? :NOTE:\n%U\n%a\n" :clock-resume t)
-;;         ))
+(setq org-capture-templates
+      `(("t" "todo" entry (file "")  ; "" => `org-default-notes-file'
+         "* NEXT %?\n%U\n" :clock-resume t)
+        ("n" "note" entry (file "")
+         "* %? :NOTE:\n%U\n%a\n" :clock-resume t)
+        ))
 
 
 

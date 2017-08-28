@@ -34,7 +34,8 @@
 
 
 ;; Convenient binding for vc-git-grep
-(global-set-key (kbd "C-x v f") 'vc-git-grep)
+(after-load 'vc
+  (define-key vc-prefix-map (kbd "f") 'vc-git-grep))
 
 
 
@@ -62,6 +63,8 @@
              "^  \\([a-z\\-]+\\) +"
              (shell-command-to-string "git svn help") 1))))
 
+(autoload 'vc-git-root "vc-git")
+
 (defun git-svn (dir command)
   "Run a git svn subcommand in DIR."
   (interactive (list (read-directory-name "Directory: ")
@@ -73,7 +76,9 @@
 
 (maybe-require-package 'git-messenger)
 ;; Though see also vc-annotate's "n" & "p" bindings
-(global-set-key (kbd "C-x v p") #'git-messenger:popup-message)
+(after-load 'vc
+  (setq git-messenger:show-detail t)
+  (define-key vc-prefix-map (kbd "p") #'git-messenger:popup-message))
 
 
 (provide 'init-git)
