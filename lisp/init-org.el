@@ -449,7 +449,6 @@ typical word processor."
      (ledger . t)
      (ocaml . nil)
      (octave . t)
-     (plantuml . t)
      (python . t)
      (ruby . t)
      (screen . nil)
@@ -462,14 +461,6 @@ typical word processor."
 (after-load 'org
   (define-key org-mode-map (kbd "C-c C-x t") 'org-pomodoro))
 
-;;; plantuml jar path
-(setq org-plantuml-jar-path "~/.emacs.d/plantuml.jar")
-(unless (file-exists-p org-plantuml-jar-path)
-  (let ((jar-name "plantuml.jar")
-        (url "http://nchc.dl.sourceforge.net/project/plantuml/plantuml.jar"))
-    (setq org-plantuml-jar-path (expand-file-name jar-name (file-name-directory user-init-file)))
-    (unless (file-exists-p org-plantuml-jar-path)
-      (url-copy-file url org-plantuml-jar-path))))
 
 ;;; org-mobile automatic sync
 (defvar org-mobile-sync-timer nil)
