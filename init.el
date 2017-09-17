@@ -74,7 +74,6 @@
 
 (require 'init-editing-utils)
 (require 'init-whitespace)
-(require 'init-fci)
 
 (require 'init-vc)
 (require 'init-darcs)
