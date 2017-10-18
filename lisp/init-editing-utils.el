@@ -192,7 +192,8 @@
 ;; Page break lines
 ;;----------------------------------------------------------------------------
 (require-package 'page-break-lines)
-(add-hook 'after-init-hook 'global-page-break-lines-mode)
+(unless (version< emacs-version "24.4")
+  (add-hook 'after-init-hook 'global-page-break-lines-mode))
 (after-load 'page-break-lines
   (diminish 'page-break-lines-mode))
 
