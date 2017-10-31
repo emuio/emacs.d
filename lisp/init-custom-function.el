@@ -16,7 +16,7 @@
 ;;----------------------------------------------------------------------------
 ;; 绑定M-0为切换h/cpp方法
 ;;----------------------------------------------------------------------------
-(global-set-key "\260" 'ff-find-other-file)
+(global-set-key (kbd "M-0") 'ff-find-other-file)
 
 ;;; dos2unix and clean whitespace
 (defun dos2unix ()
