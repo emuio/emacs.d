@@ -76,7 +76,8 @@
 
 
 (unless (fboundp 'display-line-numbers-mode)
-  (require-package 'nlinum))
+  (require-package 'nlinum)
+  (global-nlinum-mode))
 
 
 (when (require-package 'rainbow-delimiters)
