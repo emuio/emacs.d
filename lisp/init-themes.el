@@ -29,4 +29,7 @@
   (color-theme-sanityinc-solarized-dark))
 
 
+(maybe-require-package 'dimmer)
+
+
 (provide 'init-themes)

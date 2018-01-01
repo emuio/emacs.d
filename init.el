@@ -99,6 +99,7 @@
 (require 'init-python-mode)
 (require 'init-haskell)
 (require 'init-elm)
+(require 'init-purescript)
 (require 'init-ruby-mode)
 (require 'init-rails)
 (require 'init-sql)
@@ -106,7 +107,7 @@
 (require 'init-toml)
 (require 'init-yaml)
 (require 'init-docker)
-(maybe-require-package 'terraform-mode)
+(require 'init-terraform)
 
 (require 'init-paredit)
 (require 'init-lisp)
@@ -153,6 +154,7 @@
   (require-package 'osx-location))
 (maybe-require-package 'regex-tool)
 (require-package 'protobuf-mode)
+(maybe-require-package 'dotenv-mode)
 
 ;;----------------------------------------------------------------------------
 ;; Allow access from emacsclient
