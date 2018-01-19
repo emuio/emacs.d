@@ -18,4 +18,4 @@
              'anaconda-mode-show-unreadable-response)
 
 
-(provide 'init-python-mode)
+(provide 'init-python)
