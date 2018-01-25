@@ -145,6 +145,7 @@
 (require 'init-ppt)
 (unless (version< emacs-version "24.4")
   (require 'init-ycmd))
+(require 'init-weather)
 
 ;; Extra packages which don't require any configuration
 
