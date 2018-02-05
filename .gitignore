@@ -51,10 +51,11 @@ site-lisp/package/
 /test
 /games
 /tutorial
-/plantuml.jar
 /projectile-bookmarks.eld
 /anaconda-mode/
 /.historian
 /.uptimes.el
 /rake.cache
 /eww-bookmarks
+/plantuml.jar
+/magithub
