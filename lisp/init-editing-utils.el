@@ -32,12 +32,10 @@
 (add-hook 'after-init-hook 'global-auto-revert-mode)
 (setq global-auto-revert-non-file-buffers t
       auto-revert-verbose nil)
+(after-load 'autorevert
+  (diminish 'auto-revert-mode))
 
 (add-hook 'after-init-hook 'transient-mark-mode)
-
-
-(when (maybe-require-package 'dynamic-spaces)
-  (dynamic-spaces-global-mode))
 
 
 
@@ -106,10 +104,11 @@
 
 
 (when (maybe-require-package 'symbol-overlay)
-  (dolist (hook '(prog-mode-hook html-mode-hook css-mode-hook))
+  (dolist (hook '(prog-mode-hook html-mode-hook css-mode-hook yaml-mode-hook conf-mode-hook))
     (add-hook hook 'symbol-overlay-mode))
   (after-load 'symbol-overlay
     (diminish 'symbol-overlay-mode)
+    (define-key symbol-overlay-mode-map (kbd "M-i") 'symbol-overlay-put)
     (define-key symbol-overlay-mode-map (kbd "M-n") 'symbol-overlay-jump-next)
     (define-key symbol-overlay-mode-map (kbd "M-p") 'symbol-overlay-jump-prev)))
 
@@ -245,7 +244,7 @@
 (require-package 'whole-line-or-region)
 (add-hook 'after-init-hook 'whole-line-or-region-mode)
 (after-load 'whole-line-or-region
-  (diminish 'whole-line-or-region-mode))
+  (diminish 'whole-line-or-region-local-mode))
 
 (defun suspend-mode-during-cua-rect-selection (mode-name)
   "Add an advice to suspend `MODE-NAME' while selecting a CUA rectangle."
