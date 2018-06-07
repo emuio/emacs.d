@@ -99,10 +99,5 @@
 
 (require-package 'disable-mouse)
 
-;;; nyan cat
-(require-package 'nyan-mode)
-(nyan-mode t)
-(nyan-start-animation)
-(setq nyan-wavy-trail t)
 
 (provide 'init-gui-frames)
