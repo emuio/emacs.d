@@ -1,7 +1,3 @@
-(require-package 'sql-indent)
-(after-load 'sql
-  (require 'sql-indent))
-
 (after-load 'sql
   ;; sql-mode pretty much requires your psql to be uncustomised from stock settings
   (push "--no-psqlrc" sql-postgres-options))
@@ -47,6 +43,24 @@ Fix for the above hasn't been released as of Emacs 25.2."
     (sql-product-font-lock nil nil)))
 (add-hook 'sql-interactive-mode-hook 'sanityinc/font-lock-everything-in-sql-interactive-mode)
 
+(defun sanityinc/sqlformat (beg end)
+  "Reformat SQL in region from BEG to END using the \"sqlformat\" program.
+If no region is active, the current statement (paragraph) is reformatted.
+Install the \"sqlparse\" (Python) package to get \"sqlformat\"."
+  (interactive "r")
+  (unless (use-region-p)
+    (setq beg (save-excursion
+		(backward-paragraph)
+                (skip-syntax-forward " >")
+		(point))
+          end (save-excursion
+		(forward-paragraph)
+                (skip-syntax-backward " >")
+		(point))))
+  (shell-command-on-region beg end "sqlformat -r -" nil t "*sqlformat-errors*" t))
+
+(after-load 'sql
+  (define-key sql-mode-map (kbd "C-c C-f") 'sanityinc/sqlformat))
 
 ;; Package ideas:
 ;;   - PEV
