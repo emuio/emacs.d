@@ -87,6 +87,9 @@
   (require-package 'nlinum)
   (global-nlinum-mode))
 
+(when (fboundp 'global-display-line-numbers-mode)
+  (global-display-line-numbers-mode))
+
 
 (when (require-package 'rainbow-delimiters)
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
