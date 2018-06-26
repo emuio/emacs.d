@@ -5,6 +5,7 @@
 /.session
 /session.*
 /custom.el
+/lisp/init-local.el
 *.elc
 CVS
 .svn
