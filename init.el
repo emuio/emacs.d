@@ -193,7 +193,7 @@
 ;;----------------------------------------------------------------------------
 ;; Allow users to provide an optional "init-local" containing personal settings
 ;;----------------------------------------------------------------------------
-(require 'init-locale nil t)
+(require 'init-local nil t)
 
 ;;----------------------------------------------------------------------------
 ;; 3rd party code which isn't available in MELPA
