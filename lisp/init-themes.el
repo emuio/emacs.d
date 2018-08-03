@@ -30,7 +30,7 @@
 
 
 (when (maybe-require-package 'dimmer)
-  (setq-default dimmer-fraction 0.1)
+  (setq-default dimmer-fraction 0.15)
   (add-hook 'after-init-hook 'dimmer-mode))
 
 
