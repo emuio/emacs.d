@@ -87,8 +87,8 @@
   (require-package 'nlinum)
   (global-nlinum-mode))
 
-(when (fboundp 'global-display-line-numbers-mode)
-  (global-display-line-numbers-mode))
+(when (fboundp 'display-line-numbers-mode)
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode))
 
 
 (when (require-package 'rainbow-delimiters)
@@ -328,5 +328,10 @@ With arg N, insert N newlines."
 (after-load 'guide-key
   (diminish 'guide-key-mode))
 
+
+
+(when (require-package 'highlight-indent-guides)
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+  (setq highlight-indent-guides-method 'character))
 
 (provide 'init-editing-utils)
