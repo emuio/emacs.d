@@ -19,6 +19,13 @@
 (when (fboundp 'set-fontset-font)
   (set-fontset-font "fontset-default" 'unicode"STHeiti 14"))
 
+(require-package 'cnfonts)
+;; 让 cnfonts 随着 Emacs 自动生效。
+(cnfonts-enable)
+(global-set-key (kbd "C-x C--") 'cnfonts-decrease-fontsize)
+(global-set-key (kbd "C-x C-=") 'cnfonts-increase-fontsize)
+(global-set-key (kbd "C-x C-0") 'cnfonts-reset-fontsize)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; unicad.el 让 Emacs 自动识别文件编码
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
