@@ -16,6 +16,6 @@
 (add-hook 'before-save-hook 'gofmt-before-save)
 
 ;; Godef jump key binding
-(define-key go-mode-map (kbd "M-.") 'godef-jump)
+;; (define-key go-mode-map (kbd "M-.") 'godef-jump)
 
 (provide 'init-go)
