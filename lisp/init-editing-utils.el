@@ -331,7 +331,7 @@ With arg N, insert N newlines."
 
 
 
-(when (and ((version< "25.1" emacs-version))
+(when (and (version< "25.1" emacs-version)
            (require-package 'highlight-indent-guides))
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
   (setq highlight-indent-guides-method 'character))
