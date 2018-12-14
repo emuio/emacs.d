@@ -139,7 +139,7 @@
 (require 'init-inno)
 (require 'init-speedbar)
 (require 'init-cc-mode)
-(unless (version<= emacs-version "24.1")
+(unless (version<= emacs-version "25.1")
   (require 'init-ggtags))
 (require 'init-yasnippet)
 (unless (version<= emacs-version "24.1")
