@@ -9,7 +9,7 @@
                   ivy-magic-tilde nil
                   ivy-dynamic-exhibit-delay-ms 150
                   ivy-initial-inputs-alist
-                  '((man . "^")
+                  '((Man-completion-table . "^")
                     (woman . "^")))
 
     ;; IDO-style directory navigation
@@ -30,7 +30,7 @@
                   '((t . ivy--regex-fuzzy)))))
 
 (when (maybe-require-package 'ivy-historian)
-  (add-hook 'after-init-hook (lambda () (ivy-historian-mode t))))
+  (add-hook 'after-init-hook 'ivy-historian-mode))
 
 (when (maybe-require-package 'counsel)
   (setq-default counsel-mode-override-describe-bindings t)
@@ -61,6 +61,8 @@ instead."
                            (projectile-project-root)
                          (error default-directory)))))
             (funcall search-function initial-input dir)))))
+    (after-load 'ivy
+      (add-to-list 'ivy-height-alist (cons 'counsel-ag 20)))
     (global-set-key (kbd "M-?") 'sanityinc/counsel-search-project)))
 
 

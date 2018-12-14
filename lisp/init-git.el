@@ -13,15 +13,26 @@
   ;; quickly open magit on any one of your projects.
   (global-set-key [(meta f12)] 'magit-status)
   (global-set-key (kbd "C-x g") 'magit-status)
-  (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup))
+  (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
+
+  (defun sanityinc/magit-or-vc-log-file (&optional prompt)
+    (interactive "P")
+    (if (and (buffer-file-name)
+             (eq 'Git (vc-backend (buffer-file-name))))
+        (if prompt
+            (magit-log-buffer-file-popup)
+          (magit-log-buffer-file t))
+      (vc-print-log)))
+
+  (after-load 'vc
+    (define-key vc-prefix-map (kbd "l") 'sanityinc/magit-or-vc-log-file)))
+
 
 (after-load 'magit
   (define-key magit-status-mode-map (kbd "C-M-<up>") 'magit-section-up)
   (add-hook 'magit-popup-mode-hook 'sanityinc/no-trailing-whitespace))
 
-(when (maybe-require-package 'magit-todos)
-  (after-load 'magit
-    (magit-todos-mode)))
+(maybe-require-package 'magit-todos)
 
 (require-package 'fullframe)
 (after-load 'magit
@@ -76,13 +87,6 @@
   (let* ((default-directory (vc-git-root dir))
          (compilation-buffer-name-function (lambda (major-mode-name) "*git-svn*")))
     (compile (concat "git svn " command))))
-
-
-(maybe-require-package 'git-messenger)
-;; Though see also vc-annotate's "n" & "p" bindings
-(after-load 'vc
-  (setq git-messenger:show-detail t)
-  (define-key vc-prefix-map (kbd "p") #'git-messenger:popup-message))
 
 
 (provide 'init-git)

@@ -27,11 +27,12 @@
   (add-hook 'after-init-hook 'ipretty-mode))
 
 
-(defadvice pp-display-expression (after sanityinc/make-read-only (expression out-buffer-name) activate)
+(defun sanityinc/make-read-only (expression out-buffer-name)
   "Enable `view-mode' in the output buffer - if any - so it can be closed with `\"q\"."
   (when (get-buffer out-buffer-name)
     (with-current-buffer out-buffer-name
       (view-mode 1))))
+(advice-add 'pp-display-expression :after 'sanityinc/make-read-only)
 
 
 
@@ -48,9 +49,8 @@
 ;; Use C-c C-z to toggle between elisp files and an ielm session
 ;; I might generalise this to ruby etc., or even just adopt the repl-toggle package.
 
-(defvar sanityinc/repl-original-buffer nil
+(defvar-local sanityinc/repl-original-buffer nil
   "Buffer from which we jumped to this REPL.")
-(make-variable-buffer-local 'sanityinc/repl-original-buffer)
 
 (defvar sanityinc/repl-switch-function 'switch-to-buffer-other-window)
 
@@ -82,8 +82,7 @@
   "Locally set `hippie-expand' completion functions for use with Emacs Lisp."
   (make-local-variable 'hippie-expand-try-functions-list)
   (add-to-list 'hippie-expand-try-functions-list 'try-complete-lisp-symbol t)
-  (add-to-list 'hippie-expand-try-functions-list 'try-complete-lisp-symbol-partially t)
-  (add-to-list 'hippie-expand-try-functions-list 'my/try-complete-lisp-symbol-without-namespace t))
+  (add-to-list 'hippie-expand-try-functions-list 'try-complete-lisp-symbol-partially t))
 
 
 ;; ----------------------------------------------------------------------------
@@ -129,7 +128,6 @@
 
 (defvar sanityinc/lispy-modes-hook
   '(enable-paredit-mode
-    turn-on-eldoc-mode
     sanityinc/enable-check-parens-on-save)
   "Hook run in all Lisp modes.")
 
@@ -162,11 +160,8 @@
 (dolist (hook (mapcar #'derived-mode-hook-name sanityinc/elispy-modes))
   (add-hook hook 'sanityinc/emacs-lisp-setup))
 
-(if (boundp 'eval-expression-minibuffer-setup-hook)
-    (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
-  (require-package 'eldoc-eval)
-  (require 'eldoc-eval)
-  (add-hook 'after-init-hook 'eldoc-in-minibuffer-mode))
+(when (boundp 'eval-expression-minibuffer-setup-hook)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode))
 
 (add-to-list 'auto-mode-alist '("\\.emacs-project\\'" . emacs-lisp-mode))
 (add-to-list 'auto-mode-alist '("archive-contents\\'" . emacs-lisp-mode))
@@ -191,7 +186,7 @@
 (defvar sanityinc/vc-reverting nil
   "Whether or not VC or Magit is currently reverting buffers.")
 
-(defadvice revert-buffer (after sanityinc/maybe-remove-elc activate)
+(defun sanityinc/maybe-remove-elc (&rest _)
   "If reverting from VC, delete any .elc file that will now be out of sync."
   (when sanityinc/vc-reverting
     (when (and (eq 'emacs-lisp-mode major-mode)
@@ -201,13 +196,13 @@
         (when (file-exists-p elc)
           (message "Removing out-of-sync elc file %s" (file-name-nondirectory elc))
           (delete-file elc))))))
+(advice-add 'revert-buffer :after 'sanityinc/maybe-remove-elc)
 
-(defadvice magit-revert-buffers (around sanityinc/reverting activate)
+(defun sanityinc/reverting (orig &rest args)
   (let ((sanityinc/vc-reverting t))
-    ad-do-it))
-(defadvice vc-revert-buffer-internal (around sanityinc/reverting activate)
-  (let ((sanityinc/vc-reverting t))
-    ad-do-it))
+    (apply orig args)))
+(advice-add 'magit-revert-buffers :around 'sanityinc/reverting)
+(advice-add 'vc-revert-buffer-internal :around 'sanityinc/reverting)
 
 
 
@@ -224,24 +219,14 @@
 
 
 ;; Extras for theme editing
-
-(defvar sanityinc/theme-mode-hook nil
-  "Hook triggered when editing a theme file.")
-
-(defun sanityinc/run-theme-mode-hooks-if-theme ()
-  "Run `sanityinc/theme-mode-hook' if this appears to a theme."
-  (when (string-match "\\(color-theme-\\|-theme\\.el\\)" (buffer-name))
-    (run-hooks 'sanityinc/theme-mode-hook)))
-
-(add-hook 'emacs-lisp-mode-hook 'sanityinc/run-theme-mode-hooks-if-theme t)
-
 (when (maybe-require-package 'rainbow-mode)
-  (add-hook 'sanityinc/theme-mode-hook 'rainbow-mode)
-  (add-hook 'help-mode-hook 'rainbow-mode))
-
-(when (maybe-require-package 'aggressive-indent)
-  ;; Can be prohibitively slow with very long forms
-  (add-to-list 'sanityinc/theme-mode-hook (lambda () (aggressive-indent-mode -1)) t))
+  (defun sanityinc/enable-rainbow-mode-if-theme ()
+    (when (and (buffer-file-name) (string-match-p "\\(color-theme-\\|-theme\\.el\\)" (buffer-file-name)))
+      (rainbow-mode)))
+  (add-hook 'emacs-lisp-mode-hook 'sanityinc/enable-rainbow-mode-if-theme)
+  (add-hook 'help-mode-hook 'rainbow-mode)
+  (after-load 'rainbow-mode
+    (diminish 'rainbow-mode)))
 
 
 
@@ -252,7 +237,8 @@
 (when (maybe-require-package 'flycheck)
   (require-package 'flycheck-package)
   (after-load 'flycheck
-    (flycheck-package-setup)))
+    (after-load 'elisp-mode
+      (flycheck-package-setup))))
 
 
 
@@ -261,31 +247,7 @@
   (define-key ert-results-mode-map (kbd "g") 'ert-results-rerun-all-tests))
 
 
-(defun sanityinc/cl-libify-next ()
-  "Find next symbol from 'cl and replace it with the 'cl-lib equivalent."
-  (interactive)
-  (let ((case-fold-search nil))
-    (re-search-forward
-     (concat
-      "("
-      (regexp-opt
-       ;; Not an exhaustive list
-       '("loop" "incf" "plusp" "first" "decf" "minusp" "assert"
-         "case" "destructuring-bind" "second" "third" "defun*"
-         "defmacro*" "return-from" "labels" "cadar" "fourth"
-         "cadadr") t)
-      "\\_>")))
-  (let ((form (match-string 1)))
-    (backward-sexp)
-    (cond
-     ((string-match "^\\(defun\\|defmacro\\)\\*$")
-      (kill-sexp)
-      (insert (concat "cl-" (match-string 1))))
-     (t
-      (insert "cl-")))
-    (when (fboundp 'aggressive-indent-indent-defun)
-      (aggressive-indent-indent-defun))))
-
+(maybe-require-package 'cl-libify)
 
 (maybe-require-package 'cask-mode)
 

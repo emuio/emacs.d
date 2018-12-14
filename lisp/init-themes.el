@@ -31,7 +31,10 @@
 
 (when (maybe-require-package 'dimmer)
   (setq-default dimmer-fraction 0.15)
-  (add-hook 'after-init-hook 'dimmer-mode))
+  (add-hook 'after-init-hook 'dimmer-mode)
+  ;; TODO: file upstream as a PR
+  (after-load 'dimmer
+    (advice-add 'frame-set-background-mode :after (lambda (&rest args) (dimmer-process-all)))))
 
 
 (provide 'init-themes)
