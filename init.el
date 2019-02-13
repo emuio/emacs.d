@@ -1,8 +1,13 @@
-;; -*- lexical-binding: t -*-
-(setq debug-on-error t)
+;;; init.el --- Load the full configuration -*- lexical-binding: t -*-
+;;; Commentary:
 
-;;; This file bootstraps the configuration, which is divided into
-;;; a number of other files.
+;; This file bootstraps the configuration, which is divided into
+;; a number of other files.
+
+;;; Code:
+
+;; Produce backtraces when errors occur
+(setq debug-on-error t)
 
 (let ((minver "24.4"))
   (when (version< emacs-version minver)
@@ -45,7 +50,6 @@
 ;; Load configs for specific features and modes
 ;;----------------------------------------------------------------------------
 
-(require-package 'wgrep)
 (require-package 'diminish)
 (require-package 'scratch)
 (require-package 'command-log-mode)
@@ -212,3 +216,4 @@
 ;; coding: utf-8
 ;; no-byte-compile: t
 ;; End:
+;;; init.el ends here

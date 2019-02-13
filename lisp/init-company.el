@@ -1,3 +1,7 @@
+;;; init-company.el --- Completion with company -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
 ;; WAITING: haskell-mode sets tags-table-list globally, breaks tags-completion-at-point-function
 ;; TODO Default sort order should place [a-z] before punctuation
 
@@ -35,8 +39,7 @@
         (page-break-lines-mode 1)))
 
     (add-hook 'company-completion-started-hook 'sanityinc/page-break-lines-disable)
-    (add-hook 'company-completion-finished-hook 'sanityinc/page-break-lines-maybe-reenable)
-    (add-hook 'company-completion-cancelled-hook 'sanityinc/page-break-lines-maybe-reenable)))
+    (add-hook 'company-after-completion-hook 'sanityinc/page-break-lines-maybe-reenable)))
 
 ;;; Possible improvements
 (setq company-tooltip-limit 20) ; bigger popup window
@@ -45,3 +48,4 @@
 
 
 (provide 'init-company)
+;;; init-company.el ends here

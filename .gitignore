@@ -59,3 +59,5 @@ site-lisp/package/
 /plantuml.jar
 /magithub
 /cnfonts
+.cache/
+/forge-database.sqlite

@@ -1,4 +1,7 @@
-;; -*- lexical-binding: t -*-
+;;; init-editing-utils.el --- Day-to-day editing helpers -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
 (require-package 'unfill)
 
 (when (fboundp 'electric-pair-mode)
@@ -338,3 +341,4 @@ With arg N, insert N newlines."
 
 
 (provide 'init-editing-utils)
+;;; init-editing-utils.el ends here

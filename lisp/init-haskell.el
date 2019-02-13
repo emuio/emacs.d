@@ -1,3 +1,7 @@
+;;; init-haskell.el --- Support the Haskell language -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
 (require-package 'haskell-mode)
 
 
@@ -84,3 +88,4 @@
 
 
 (provide 'init-haskell)
+;;; init-haskell.el ends here

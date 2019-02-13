@@ -1,3 +1,7 @@
+;;; init-lisp.el --- Emacs lisp settings, and common config for other lisps -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
 (require-package 'elisp-slime-nav)
 (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
   (add-hook hook 'turn-on-elisp-slime-nav-mode))
@@ -7,6 +11,19 @@
               (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n"))
 
 
+(defun sanityinc/headerise-elisp ()
+  "Add minimal header and footer to an elisp buffer in order to placate flycheck."
+  (interactive)
+  (let ((fname (if (buffer-file-name)
+                   (file-name-nondirectory (buffer-file-name))
+                 (error "This buffer is not visiting a file"))))
+    (save-excursion
+      (goto-char (point-min))
+      (insert ";;; " fname " --- Insert description here -*- lexical-binding: t -*-\n"
+              ";;; Commentary:\n"
+              ";;; Code:\n\n")
+      (goto-char (point-max))
+      (insert ";;; " fname " ends here\n"))))
 
 
 ;; Make C-x C-e run 'eval-region if the region is active
@@ -261,3 +278,4 @@
 (setq inferior-lisp-program "sbcl")
 
 (provide 'init-lisp)
+;;; init-lisp.el ends here

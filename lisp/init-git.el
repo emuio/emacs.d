@@ -1,9 +1,18 @@
+;;; init-git.el --- Git SCM support -*- lexical-binding: t -*-
+;;; Commentary:
+
+;; See also init-github.el.
+
+;;; Code:
+
 ;; TODO: link commits from vc-log to magit-show-commit
 ;; TODO: smerge-mode
 (require-package 'git-blamed)
 (require-package 'gitignore-mode)
 (require-package 'gitconfig-mode)
-(maybe-require-package 'git-timemachine)
+(when (maybe-require-package 'git-timemachine)
+  (global-set-key (kbd "C-x v t") 'git-timemachine-toggle))
+
 
 
 (when (maybe-require-package 'magit)
@@ -90,3 +99,4 @@
 
 
 (provide 'init-git)
+;;; init-git.el ends here

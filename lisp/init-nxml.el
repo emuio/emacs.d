@@ -1,3 +1,7 @@
+;;; init-nxml.el --- Support for editing XML with NXML -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
 (add-auto-mode
  'nxml-mode
  (concat "\\."
@@ -36,3 +40,4 @@ indentation rules."
 
 
 (provide 'init-nxml)
+;;; init-nxml.el ends here
