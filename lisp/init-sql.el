@@ -51,9 +51,6 @@ Fix for the above hasn't been released as of Emacs 25.2."
 (after-load 'sql
   (define-key sql-mode-map (kbd "C-c C-f") 'sqlformat))
 
-(maybe-require-package 'sqlup-mode)
-(add-hook 'sql-mode-hook 'sqlup-mode)
-
 ;; Package ideas:
 ;;   - PEV
 (defun sanityinc/sql-explain-region-as-json (beg end &optional copy)
@@ -101,15 +98,16 @@ This command currently blocks the UI, sorry."
             (if (zerop retcode)
                 (progn
                   (json-mode)
+                  (read-only-mode 1)
                   (if copy
                       (progn
                         (kill-ring-save (buffer-substring-no-properties (point-min) (point-max)))
                         (message "EXPLAIN output copied to kill-ring."))
-                    (view-buffer (current-buffer))))
+                    (display-buffer (current-buffer))))
               (with-current-buffer (get-buffer-create "*sql-explain-errors*")
-                (setq buffer-read-only nil)
-                (insert-file-contents err-file nil nil nil t)
-                (view-buffer (current-buffer))
+                (let ((inhibit-read-only t))
+                  (insert-file-contents err-file nil nil nil t))
+                (display-buffer (current-buffer))
                 (user-error "EXPLAIN failed")))))))))
 
 

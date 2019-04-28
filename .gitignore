@@ -61,3 +61,4 @@ site-lisp/package/
 /cnfonts
 .cache/
 /forge-database.sqlite
+/transient
