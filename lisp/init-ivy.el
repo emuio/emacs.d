@@ -55,7 +55,8 @@
 If there is no project root, or if the prefix argument
 USE-CURRENT-DIR is set, then search from the current directory
 instead."
-          (interactive (list (thing-at-point 'symbol)
+          (interactive (list (let ((sym (thing-at-point 'symbol)))
+                               (when sym (regexp-quote sym)))
                              current-prefix-arg))
           (let ((current-prefix-arg)
                 (dir (if use-current-dir
@@ -71,12 +72,7 @@ instead."
 
 (when (maybe-require-package 'swiper)
   (after-load 'ivy
-    (defun sanityinc/swiper-at-point (sym)
-      "Use `swiper' to search for the symbol at point."
-      (interactive (list (thing-at-point 'symbol)))
-      (swiper sym))
-
-    (define-key ivy-mode-map (kbd "M-s /") 'sanityinc/swiper-at-point)))
+    (define-key ivy-mode-map (kbd "M-s /") 'swiper-thing-at-point)))
 
 
 (when (maybe-require-package 'ivy-xref)
