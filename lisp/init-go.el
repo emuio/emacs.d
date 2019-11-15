@@ -2,6 +2,8 @@
 (unless (version< emacs-version "24.3")
   (require-package 'company-go))
 
+(require 'go-mode)
+
 ;;autocomplete
 (add-hook 'go-mode-hook 'company-mode)
 (add-hook 'go-mode-hook
