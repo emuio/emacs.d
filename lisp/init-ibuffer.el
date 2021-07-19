@@ -7,7 +7,7 @@
 ;;; Code:
 
 (require-package 'fullframe)
-(after-load 'ibuffer
+(with-eval-after-load 'ibuffer
  (fullframe ibuffer ibuffer-quit))
 
 (require-package 'ibuffer-vc)
@@ -21,7 +21,7 @@
 
 
 
-(after-load 'ibuffer
+(with-eval-after-load 'ibuffer
   ;; Use human readable Size column instead of original one
   (define-ibuffer-column size-h
     (:name "Size" :inline t)

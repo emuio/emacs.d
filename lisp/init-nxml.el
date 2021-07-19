@@ -34,9 +34,8 @@ indentation rules."
     (nxml-mode)
     (indent-region beg end)))
 
-;;----------------------------------------------------------------------------
+
 ;; Integration with tidy for html + xml
-;;----------------------------------------------------------------------------
 
 
 (provide 'init-nxml)

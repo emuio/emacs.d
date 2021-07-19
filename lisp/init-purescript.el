@@ -11,7 +11,7 @@
 
   (add-hook 'purescript-mode-hook (apply-partially 'prettify-symbols-mode -1))
 
-  (after-load 'purescript-mode
+  (with-eval-after-load 'purescript-mode
     (define-key purescript-mode-map (kbd "C-o") 'open-line))
 
   (when (maybe-require-package 'reformatter)
@@ -45,7 +45,7 @@ corresponding .purs file is open."
 
     (define-minor-mode psc-ide-foreign-js-mode
       "Rebuild corresponding purescript file."
-      nil
+      :init-value nil
       :lighter " PursJS"
       :global nil
       (if psc-ide-foreign-js-mode
@@ -56,9 +56,9 @@ corresponding .purs file is open."
     (add-hook 'purescript-mode-hook 'inferior-psci-mode))
 
   (when (maybe-require-package 'add-node-modules-path)
-    (after-load 'purescript-mode
+    (with-eval-after-load 'purescript-mode
       (add-hook 'purescript-mode-hook 'add-node-modules-path))
-    (after-load 'psci
+    (with-eval-after-load 'psci
       (advice-add 'psci :around (lambda (oldfun &rest args)
                                   (let ((psci/purs-path (or (executable-find "purs")
                                                             psci/purs-path)))
