@@ -4,7 +4,7 @@
 
 
 ;; Stop C-z from minimizing windows under OS X
-(defun maybe-suspend-frame ()
+
 (defun sanityinc/maybe-suspend-frame ()
   (interactive)
   (unless (and *is-a-mac* window-system)
