@@ -195,17 +195,11 @@
 ;; Allow users to provide an optional "init-local" containing personal settings
 (require 'init-local nil t)
 
-<<<<<<< HEAD
 ;;----------------------------------------------------------------------------
 ;; 3rd party code which isn't available in MELPA
 ;;----------------------------------------------------------------------------
 (require 'sunrise-commander)
 
-
-
-
-=======
->>>>>>> purcell/master
 (provide 'init)
 
 
