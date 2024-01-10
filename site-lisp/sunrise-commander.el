@@ -209,7 +209,7 @@
 (require 'hl-line)
 (require 'sort)
 (require 'term)
-(eval-when-compile (require 'cl)
+(eval-when-compile (require 'cl-lib)
                    (require 'recentf)
                    (require 'tramp))
 

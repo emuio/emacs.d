@@ -21,7 +21,7 @@
 
 (require-package 'cnfonts)
 ;; 让 cnfonts 随着 Emacs 自动生效。
-(cnfonts-enable)
+(cnfonts-mode 1)
 (global-set-key (kbd "C-x C--") 'cnfonts-decrease-fontsize)
 (global-set-key (kbd "C-x C-=") 'cnfonts-increase-fontsize)
 (global-set-key (kbd "C-x C-0") 'cnfonts-reset-fontsize)
