@@ -15,7 +15,7 @@
 ;;(setq-default pathname-coding-system 'euc-cn)
 
 (when *is-a-mac*
-  (set-default-font "Monaco 12"))
+  (set-frame-font "Monaco 12"))
 (when (fboundp 'set-fontset-font)
   (set-fontset-font "fontset-default" 'unicode"STHeiti 14"))
 
