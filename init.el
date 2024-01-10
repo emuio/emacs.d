@@ -151,8 +151,6 @@
 (unless (version<= emacs-version "25.1")
   (require 'init-ggtags))
 (require 'init-yasnippet)
-(unless (version<= emacs-version "24.1")
-  (require 'init-youdao-dictionary))
 (require 'init-go)
 (require 'init-ppt)
 (unless (version< emacs-version "24.4")
