@@ -213,6 +213,11 @@
 ;;----------------------------------------------------------------------------
 (require 'sunrise-commander)
 
+                                        ;(add-to-list 'load-path "~/.emacs.d/site-lisp/emacs-application-framework/")
+                                        ;(require 'eaf)
+                                        ;(require 'eaf-browser)
+                                        ;(require 'eaf-file-manager)
+
 (provide 'init)
 
 

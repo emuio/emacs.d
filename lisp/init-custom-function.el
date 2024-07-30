@@ -39,4 +39,27 @@
        (revert-buffer :ignore-auto :noconfirm)
      (error "The buffer has been modified"))))
 
+
+(defun delete-empty-lines ()
+  "Delete all empty lines in the current buffer."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (while (not (eobp))
+      (beginning-of-line)
+      (if (or (looking-at "^[ \t]*$")
+              (string-match "png" (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
+              (string-match "jpg" (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
+          (delete-line)
+        (forward-line 1)))))
+
+(defun delete-image-filenames ()
+  "Delete all occurrences of filenames ending with '.jpg' or '.png' in the current buffer."
+  (interactive)
+  (goto-char (point-min))
+  (let ((case-fold-search t)) ; 忽略大小写
+    (while (re-search-forward "\$\\w\\|\\s_\$\$jpg\\|png\$\\'" nil t)
+      (beginning-of-match 1)
+      (delete-region (point) (match-end 0)))))
+
 (provide 'init-custom-function)
