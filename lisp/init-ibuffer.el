@@ -6,10 +6,6 @@
 
 ;;; Code:
 
-(require-package 'fullframe)
-(with-eval-after-load 'ibuffer
- (fullframe ibuffer ibuffer-quit))
-
 (require-package 'ibuffer-vc)
 
 (defun ibuffer-set-up-preferred-filters ()
@@ -19,6 +15,8 @@
 
 (add-hook 'ibuffer-hook 'ibuffer-set-up-preferred-filters)
 
+
+(sanityinc/fullframe-mode 'ibuffer-mode)
 
 
 (with-eval-after-load 'ibuffer

@@ -20,7 +20,7 @@ in the approximate order of how much I use them, from most to least:
 * Ruby / Ruby on Rails
 * SQL
 * CSS / LESS / SASS / SCSS
-* Javascript / Typescript / Coffeescript
+* Javascript / Typescript
 * HTML / HAML / Markdown / Textile / ERB
 * Common Lisp (with Slime)
 * Python
@@ -29,33 +29,34 @@ in the approximate order of how much I use them, from most to least:
 * PHP
 * Erlang
 
-In particular, there's a nice config for *autocompletion* with
-[corfu](https://github.com/minad/corfu), and
+Included is a nice setup for in-buffer autocompletion with
+[corfu](https://github.com/minad/corfu), and minibuffer completion using
+[vertico](https://github.com/minad/vertico).
+
 `flymake` (re-using backends from [flycheck](http://www.flycheck.org))
 is used to immediately highlight syntax errors in Ruby, Python,
 Javascript, Haskell and a number of other languages.
 
 LSP support is provided using `eglot`.
 
+Various popular Emacs tools are included and configured here, such as
+`magit`, `docker.el`, `projectile`, `org-mode` etc., but the focus is moderate
+
 ## Supported Emacs versions
 
 Use the latest released Emacs version available to you. The author
 typically uses the latest stable version.
 
-The config should run on Emacs 26.1 or greater and is designed to
-degrade smoothly - see the CI build - but even basic enhancements
-like completion may be unavailable if your Emacs is too old.
-
-Some Windows users might need to follow
-[these instructions](http://xn--9dbdkw.se/diary/how_to_enable_GnuTLS_for_Emacs_24_on_Windows/index.en.html)
-to get TLS (ie. SSL) support included in their Emacs.
+The config should run on Emacs 27.1 or greater and is designed to
+degrade smoothly - see the CI build - but many enhancements may be
+unavailable if your Emacs is too old, and in general you should try
+to use the latest stable Emacs release like I do.
 
 ## Other requirements
 
 To make the most of the programming language-specific support in this
 config, further programs will likely be required, particularly those
-that [flycheck](https://github.com/flycheck/flycheck) uses to provide
-on-the-fly syntax checking.
+that flycheck or flymake use to provide on-the-fly syntax checking.
 
 ## Installation
 
