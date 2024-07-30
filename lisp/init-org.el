@@ -458,14 +458,14 @@ typical word processor."
       (sqlite . t)))))
 
 ;;; start or stop org-pomodoro
-(after-load 'org
+(with-eval-after-load 'org
   (define-key org-mode-map (kbd "C-c C-x t") 'org-pomodoro))
 
 
 ;;; org-brain
 ;;; (maybe-require-package 'org-brain)
 
-(after-load 'org
+(with-eval-after-load 'org
   (defun org-cycle-agenda-files ()
     "Cycle through the files in `org-agenda-files'.
 If the current buffer visits an agenda file, find the next one in the list.
