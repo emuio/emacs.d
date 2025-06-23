@@ -158,12 +158,11 @@
 (require 'init-yasnippet)
 (require 'init-go)
 (require 'init-ppt)
-(unless (version< emacs-version "24.4")
-  (require 'init-ycmd))
 (require 'init-weather)
 (require 'init-lua)
 (require 'init-uiua)
 (require 'init-terminals)
+;; (require 'init-eaf)
 
 ;; Extra packages which don't require any configuration
 
