@@ -163,6 +163,7 @@
 (require 'init-uiua)
 (require 'init-terminals)
 ;; (require 'init-eaf)
+(require 'init-claude-code)
 
 ;; Extra packages which don't require any configuration
 
