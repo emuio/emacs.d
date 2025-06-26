@@ -10,8 +10,8 @@
 (maybe-require-package 'transient)
 (maybe-require-package 'eat)
 
-;; Load claude-code from site-lisp
-(require 'claude-code)
+;; Load claude-code from submodule
+(load-file (expand-file-name "site-lisp/claude-code-repo/claude-code.el" user-emacs-directory))
 
 ;; Enable claude-code mode globally
 (claude-code-mode 1)
