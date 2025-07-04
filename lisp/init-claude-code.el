@@ -29,7 +29,7 @@
              '("^\\*claude"
                (display-buffer-in-side-window)
                (side . right)
-               (window-width . 90)
+               (window-width . 70)
                (window-parameters . ((no-delete-other-windows . t)))))
 
 ;; Optional: Add hook to run when Claude starts

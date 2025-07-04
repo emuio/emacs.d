@@ -15,7 +15,14 @@
 
 ;;; Standard package repositories
 
-(add-to-list 'package-archives '( "melpa" . "https://melpa.org/packages/") t)
+;; Use China mirrors for better connectivity
+(setq package-archives
+      '(("gnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+        ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/") 
+        ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+
+;; Original repositories (commented out)
+;; (add-to-list 'package-archives '( "melpa" . "https://melpa.org/packages/") t)
 ;; Official MELPA Mirror, in case necessary.
 ;;(add-to-list 'package-archives (cons "melpa-mirror" (concat proto "://www.mirrorservice.org/sites/melpa.org/packages/")) t)
 
@@ -43,7 +50,8 @@ re-downloaded in order to locate PACKAGE."
             (package-install best)
           (if no-refresh
               (error "No version of %s >= %S is available" package min-version)
-            (package-refresh-contents)
+            (with-timeout (10 (error "Package refresh timeout"))
+              (package-refresh-contents))
             (require-package package min-version t)))
         (package-installed-p package min-version))))
 
@@ -64,7 +72,29 @@ locate PACKAGE."
 
 (setq package-enable-at-startup nil)
 (setq package-native-compile t)
+
+;; Optimize package loading for faster startup
+(setq package-quickstart t)
+(setq package-refresh-timeout 10)
+
+;; Async package refresh to avoid blocking startup
+(defvar sanityinc/package-refresh-in-progress nil)
+
+(defun sanityinc/async-package-refresh ()
+  "Refresh package contents asynchronously."
+  (unless sanityinc/package-refresh-in-progress
+    (setq sanityinc/package-refresh-in-progress t)
+    (run-with-timer 1 nil
+                    (lambda ()
+                      (condition-case err
+                          (package-refresh-contents)
+                        (error (message "Background package refresh failed: %S" err)))
+                      (setq sanityinc/package-refresh-in-progress nil)))))
+
 (package-initialize)
+
+;; Schedule background package refresh after startup
+;; (add-hook 'after-init-hook 'sanityinc/async-package-refresh)
 
 
 ;; package.el updates the saved version of package-selected-packages correctly only
