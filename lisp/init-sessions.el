@@ -2,10 +2,37 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'desktop)
+
+(defvar sanityinc/desktop-auto-restore nil
+  "Non-nil means restore the saved desktop during startup.")
+
 ;; save a list of open files in ~/.emacs.d/.emacs.desktop
 (setq desktop-path (list user-emacs-directory)
-      desktop-auto-save-timeout 600)
-(desktop-save-mode 1)
+      desktop-auto-save-timeout 600
+      desktop-restore-eager 20
+      desktop-lazy-idle-delay 2
+      desktop-restore-frames nil)
+(setq desktop-files-not-to-save
+      (concat desktop-files-not-to-save
+              "\\|/Downloads/.*\\.log\\'"
+              "\\|\\.log\\'"
+              "\\|/\\.git/"
+              "\\|/node_modules/"))
+(dolist (mode '(dired-mode
+                magit-status-mode magit-diff-mode magit-log-mode
+                help-mode helpful-mode compilation-mode grep-mode occur-mode
+                vterm-mode term-mode shell-mode eshell-mode))
+  (add-to-list 'desktop-modes-not-to-save mode))
+(dolist (mode '(lsp-mode lsp-managed-mode lsp-completion-mode
+                lsp-diagnostics-mode lsp-headerline-breadcrumb-mode
+                lsp-modeline-code-actions-mode lsp-modeline-diagnostics-mode
+                lsp-modeline-workspace-status-mode lsp-lens-mode
+                flycheck-mode company-mode))
+  (add-to-list 'desktop-minor-mode-table (list mode nil)))
+
+(when sanityinc/desktop-auto-restore
+  (desktop-save-mode 1))
 
 (defun sanityinc/desktop-time-restore (orig &rest args)
   (let ((start-time (current-time)))
