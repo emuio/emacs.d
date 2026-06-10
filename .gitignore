@@ -1,5 +1,6 @@
 /url/cache
 /.emacs.desktop
+/.emacs.desktop.bak-*
 /auto-save-list
 /network-security.data
 /.session
@@ -72,3 +73,4 @@ site-lisp/package/
 .claude
 .dap-breakpoints
 package-quickstart.el
+/workspace/
