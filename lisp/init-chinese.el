@@ -29,7 +29,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; unicad.el 让 Emacs 自动识别文件编码
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'unicad)
+;; (require 'unicad)
 (setq file-name-coding-system 'utf-8)
 (setq-default coding-system-history '("utf-8" "gb2312" "latin-2" "latin-1" "gbk"))
 

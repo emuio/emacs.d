@@ -425,6 +425,30 @@ typical word processor."
   (org-display-inline-images))
 (define-key global-map (kbd "C-c m s") 'my-screenshot)
 
+(defun my/copy-filepath-with-line-or-region ()
+  "Copy current file path with line number, or region line range if active.
+Formats:
+- /path/file:line
+- /path/file:start-end"
+  (interactive)
+  (let* ((file (or (buffer-file-name) (buffer-name)))
+         (s
+          (if (use-region-p)
+              (let* ((beg (region-beginning))
+                     (end (region-end))
+                     ;; 若选区刚好在行首（通常表示上一行末尾不想包含），就把 end 往前挪一个字符
+                     (end (if (and (> end beg)
+                                   (= (save-excursion (goto-char end) (current-column)) 0))
+                              (1- end)
+                            end))
+                     (l1 (line-number-at-pos beg))
+                     (l2 (line-number-at-pos end)))
+                (format "%s:%d-%d" file l1 l2))
+            (format "%s:%d" file (line-number-at-pos)))))
+    (kill-new s)
+    (message "Copied: %s" s)))
+(define-key global-map (kbd "C-c m l") #'my/copy-filepath-with-line-or-region)
+
 
 (with-eval-after-load 'org
   (define-key org-mode-map (kbd "C-M-<up>") 'org-up-element)
