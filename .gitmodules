@@ -1,3 +1,6 @@
 [submodule "site-lisp/claude-code-repo"]
 	path = site-lisp/claude-code-repo
 	url = git@github.com:emuio/claude-code.el.git
+[submodule "site-lisp/e-code-cli"]
+	path = site-lisp/e-code-cli
+	url = https://github.com/emuio/e-code-cli.git
