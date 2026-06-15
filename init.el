@@ -164,6 +164,7 @@
 (require 'init-terminals)
 ;; (require 'init-eaf)
 (require 'init-claude-code)
+(require 'init-codex)
 
 ;; Extra packages which don't require any configuration
 

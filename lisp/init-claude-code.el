@@ -10,32 +10,31 @@
 (maybe-require-package 'transient)
 (maybe-require-package 'eat)
 
-;; Load claude-code from submodule
-(load-file (expand-file-name "site-lisp/claude-code-repo/claude-code.el" user-emacs-directory))
-
-;; Enable claude-code mode globally
-(claude-code-mode 1)
-
-;; Set up key bindings
-;; Using C-c c as the prefix key for Claude Code commands
-(global-set-key (kbd "C-c c") claude-code-command-map)
-
-;; Additional customizations
-(setq claude-code-program "claude")  ; Ensure we're using the right executable
-(setq claude-code-startup-delay 0.2) ; Small delay for better terminal setup
-
-;; Configure window display for Claude buffers
-(add-to-list 'display-buffer-alist
-             '("^\\*claude"
-               (display-buffer-in-side-window)
-               (side . right)
-               (window-width . 70)
-               (window-parameters . ((no-delete-other-windows . t)))))
-
-;; Optional: Add hook to run when Claude starts
-(add-hook 'claude-code-start-hook
-          (lambda ()
-            (message "Claude Code session started")))
+(let ((claude-file (expand-file-name "site-lisp/claude-code-repo/claude-code.el"
+                                     user-emacs-directory)))
+  (if (file-readable-p claude-file)
+      (progn
+        (load-file claude-file)
+        ;; Enable claude-code mode globally
+        (claude-code-mode 1)
+        ;; Set up key bindings
+        ;; Using C-c c as the prefix key for Claude Code commands
+        (global-set-key (kbd "C-c c") claude-code-command-map)
+        ;; Additional customizations
+        (setq claude-code-program "claude")  ; Ensure we're using the right executable
+        (setq claude-code-startup-delay 0.1) ; Small delay for better terminal setup
+        ;; Configure window display for Claude buffers
+        (add-to-list 'display-buffer-alist
+                     '("^\\*claude"
+                       (display-buffer-in-side-window)
+                       (side . right)
+                       (window-width . 80)
+                       (window-parameters . ((no-delete-other-windows . t)))))
+        ;; Optional: Add hook to run when Claude starts
+        (add-hook 'claude-code-start-hook
+                  (lambda ()
+                    (message "Claude Code session started"))))
+    (message "Claude Code submodule not found at %s; skipping claude-code setup" claude-file)))
 
 (defun my-claude-notify (title message)
   "Display a macOS notification with sound."

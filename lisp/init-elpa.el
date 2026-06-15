@@ -13,18 +13,10 @@
 
 
 
-;;; Standard package repositories
-
-;; Use China mirrors for better connectivity
+;;; Standard package repositories (prefer official for freshest packages)
 (setq package-archives
-      '(("gnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-        ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/") 
-        ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
-
-;; Original repositories (commented out)
-;; (add-to-list 'package-archives '( "melpa" . "https://melpa.org/packages/") t)
-;; Official MELPA Mirror, in case necessary.
-;;(add-to-list 'package-archives (cons "melpa-mirror" (concat proto "://www.mirrorservice.org/sites/melpa.org/packages/")) t)
+      '(("gnu"   . "https://elpa.gnu.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")))
 
 
 

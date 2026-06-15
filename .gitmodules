@@ -4,3 +4,6 @@
 [submodule "site-lisp/e-code-cli"]
 	path = site-lisp/e-code-cli
 	url = https://github.com/emuio/e-code-cli.git
+[submodule "site-lisp/codex.el"]
+	path = site-lisp/codex.el
+	url = git@github.com:emuio/codex.el.git
