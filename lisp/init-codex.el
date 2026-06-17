@@ -15,10 +15,30 @@
                                     user-emacs-directory)))
   (if (file-readable-p codex-file)
       (progn
-        (require 'codex)
+        (load codex-file nil t)
         (require 'mwheel)
         ;; Use a separate prefix from claude-code's C-c c.
         (global-set-key (kbd "C-c d") codex-command-map)
+        (defvar emuio/codex-vterm-wheel-min-interval 0.02
+          "Minimum seconds between forwarded Codex vterm wheel events.")
+
+        (defvar-local emuio/codex-vterm-wheel-last-time 0.0
+          "Last time a Codex vterm wheel event was forwarded.")
+
+        (defvar-local emuio/codex-vterm-wheel-last-button nil
+          "Last Codex vterm wheel button that was forwarded.")
+
+        (defun emuio/codex--wheel-forwardable-p (button)
+          "Return non-nil when wheel BUTTON should be forwarded now."
+          (let ((now (float-time)))
+            (when (or (not (numberp emuio/codex-vterm-wheel-last-time))
+                      (not (eq button emuio/codex-vterm-wheel-last-button))
+                      (>= (- now emuio/codex-vterm-wheel-last-time)
+                          emuio/codex-vterm-wheel-min-interval))
+              (setq-local emuio/codex-vterm-wheel-last-time now
+                          emuio/codex-vterm-wheel-last-button button)
+              t)))
+
         (defun emuio/codex--sgr-wheel-sequence (button col row)
           "Return an SGR mouse wheel sequence for BUTTON at COL and ROW.
 COL and ROW are zero-based Emacs coordinates; terminal mouse protocols use
@@ -38,10 +58,11 @@ one-based coordinates."
           "Forward mouse wheel EVENT as terminal mouse BUTTON in Codex vterm."
           (if (and (derived-mode-p 'vterm-mode)
                    (bound-and-true-p codex--tmux-target-session))
-              (let* ((cell (emuio/codex--event-col-row event))
-                     (sequence (emuio/codex--sgr-wheel-sequence
-                                button (car cell) (cdr cell))))
-                (vterm-send-string sequence))
+              (when (emuio/codex--wheel-forwardable-p button)
+                (let* ((cell (emuio/codex--event-col-row event))
+                       (sequence (emuio/codex--sgr-wheel-sequence
+                                  button (car cell) (cdr cell))))
+                  (vterm-send-string sequence)))
             (mwheel-scroll event)))
 
         (defun emuio/codex-vterm-wheel-up (event)
