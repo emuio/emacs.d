@@ -7,3 +7,7 @@
 [submodule "site-lisp/codex.el"]
 	path = site-lisp/codex.el
 	url = git@github.com:emuio/codex.el.git
+[submodule "site-lisp/package/emacs-codex-ide"]
+	path = site-lisp/package/emacs-codex-ide
+	url = git@github.com:emuio/emacs-codex-ide.git
+	branch = dev

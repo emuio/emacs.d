@@ -1,8 +1,9 @@
-;;; init-codex.el --- Codex CLI integration -*- lexical-binding: t -*-
+;;; init-codex.el --- Codex integrations -*- lexical-binding: t -*-
 ;;; Commentary:
 
 ;; Configuration for integrating the official Codex CLI into Emacs using the
-;; local codex.el submodule in site-lisp/codex.el.
+;; local codex.el submodule in site-lisp/codex.el, plus the local
+;; emacs-codex-ide checkout in site-lisp/package/emacs-codex-ide.
 
 ;;; Code:
 
@@ -10,6 +11,25 @@
 ;; transient powers `codex-menu'.
 (maybe-require-package 'vterm)
 (maybe-require-package 'transient)
+
+(let ((codex-ide-dir (expand-file-name "site-lisp/package/emacs-codex-ide"
+                                       user-emacs-directory)))
+  (if (file-directory-p codex-ide-dir)
+      (progn
+        (add-to-list 'load-path codex-ide-dir)
+        (load "codex-ide-autoloads" nil t)
+        ;; Defaults used by new Codex IDE sessions.
+        (setq codex-ide-model "gpt-5.5"
+              codex-ide-fast "off"
+              codex-ide-reasoning-effort "xhigh"
+              codex-ide-approval-policy "never"
+              codex-ide-sandbox-mode "danger-full-access"
+              codex-ide-resume-summary-turn-limit 20
+              codex-ide-personality "pragmatic")
+        (global-unset-key (kbd "C-c ;"))
+        (global-set-key (kbd "C-c C-;") #'codex-ide-menu))
+    (message "emacs-codex-ide checkout not found at %s; skipping setup"
+             codex-ide-dir)))
 
 (let ((codex-file (expand-file-name "site-lisp/codex.el/codex.el"
                                     user-emacs-directory)))

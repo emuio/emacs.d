@@ -23,7 +23,8 @@ cookies
 /tree-sitter
 /elpa
 /elpa-*
-site-lisp/package/
+site-lisp/package/*
+!site-lisp/package/emacs-codex-ide/
 /swank
 /.mc-lists.el
 /var
